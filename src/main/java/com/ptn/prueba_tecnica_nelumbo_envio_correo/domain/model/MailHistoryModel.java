@@ -1,6 +1,6 @@
 package com.ptn.prueba_tecnica_nelumbo_envio_correo.domain.model;
 
-public class SendMailModel {
+public class MailHistoryModel {
     
     private String email;
 
@@ -11,10 +11,10 @@ public class SendMailModel {
     private String parkingName;
 
 
-	public SendMailModel() {
+	public MailHistoryModel() {
 	}
 
-	public SendMailModel(String email, String message, String plate, String parkingName) {
+	public MailHistoryModel(String email, String message, String plate, String parkingName) {
 		this.email = email;
 		this.message = message;
 		this.plate = plate;
@@ -51,12 +51,6 @@ public class SendMailModel {
 
 	public void setParkingName(String parkingName) {
 		this.parkingName = parkingName;
-	}
-
-	@Override
-	public String toString() {
-		return "SendMailModel [email=" + email + ", message=" + message + ", plate=" + plate + ", parkingName="
-				+ parkingName + "]";
 	}
 
 }
