@@ -2,6 +2,7 @@ package com.ptn.prueba_tecnica_nelumbo_envio_correo.infrastructure.configuration
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 import com.ptn.prueba_tecnica_nelumbo_envio_correo.domain.api.IMailHistoryServicePort;
 import com.ptn.prueba_tecnica_nelumbo_envio_correo.domain.api.ISendMailServicePort;
@@ -20,10 +21,12 @@ public class BeanConfiguration {
 	
     private final IMailHistoryRepository iMailHistoryRepository;
 	private final IMailHistoryEntityMapper iMailHistoryEntityMapper;
+
+    private final MongoTemplate mongoTemplate;
 	
 	@Bean
     public IMailHistoryPersistencePort iMailHistoryPersistencePort() {
-        return new MailHistoryMongoAdapter(iMailHistoryRepository, iMailHistoryEntityMapper);
+        return new MailHistoryMongoAdapter(iMailHistoryRepository, iMailHistoryEntityMapper, mongoTemplate);
     }
 
     @Bean
