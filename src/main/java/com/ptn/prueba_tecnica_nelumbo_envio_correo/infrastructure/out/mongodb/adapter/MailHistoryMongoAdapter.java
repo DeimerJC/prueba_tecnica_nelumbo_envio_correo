@@ -59,7 +59,7 @@ public class MailHistoryMongoAdapter implements IMailHistoryPersistencePort {
 
         String date = "";
         
-        if ((results.getMappedResults() != null) || (!results.getMappedResults().isEmpty())) {
+        if ((results.getMappedResults() != null) && (results.getMappedResults().size() > 0)) {
         	date = results.getMappedResults().get(0).get_id();
 			return formatearFecha(date);
 		} else {
