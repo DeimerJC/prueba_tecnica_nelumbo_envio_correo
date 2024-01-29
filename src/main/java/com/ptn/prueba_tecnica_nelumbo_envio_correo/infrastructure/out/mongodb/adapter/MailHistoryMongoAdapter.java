@@ -2,6 +2,7 @@ package com.ptn.prueba_tecnica_nelumbo_envio_correo.infrastructure.out.mongodb.a
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.aggregation.SortOperation;
+import org.springframework.data.mongodb.core.query.Criteria;
 
 import com.mongodb.client.AggregateIterable;
 import com.ptn.prueba_tecnica_nelumbo_envio_correo.domain.exception.NoDataFoundException;
@@ -87,8 +89,43 @@ public class MailHistoryMongoAdapter implements IMailHistoryPersistencePort {
 	
 	@Override
 	public List<MailHistoryModel> filter(Date dateFrom, Date dateUntil, String email) {
-		// TODO Auto-generated method stub
-		return null;
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+
+		// Construir la expresión de filtrado
+		Criteria criteria = new Criteria();
+        if (dateFrom != null || dateUntil != null) {
+            Criteria dateCriteria = Criteria.where("creation");
+            if (dateFrom != null) {
+                dateCriteria = dateCriteria.gte(dateFrom);
+            }
+            if (dateUntil != null) {
+                dateCriteria = dateCriteria.lte(dateUntil);
+            }
+            criteria = criteria.andOperator(dateCriteria);
+        }
+        if (email != null) {
+            criteria = criteria.orOperator(
+                    Criteria.where("email").is(email),
+                    Criteria.where("email").exists(false)
+            );
+        }
+
+		// Agregar la operación de filtrado
+		aggregationOperations.add(Aggregation.match(criteria));
+
+		// Agregación final
+		Aggregation aggregation = Aggregation.newAggregation(aggregationOperations);
+		
+		List<MailHistoryEntity> historyEntities = new ArrayList<MailHistoryEntity>();
+		
+		historyEntities = mongoTemplate
+				.aggregate(aggregation, "mail_history", MailHistoryEntity.class).getMappedResults();
+
+		if (historyEntities.size() > 0) {
+			return iMailHistoryEntityMapper.toModelList(historyEntities);
+		} else {
+			throw new NoDataFoundException("No se pudo encontrar informacion.");
+		}
 	}
 	
 	@Override

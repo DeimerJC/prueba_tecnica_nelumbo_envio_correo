@@ -28,7 +28,8 @@ public class SendMailRestController {
 
     @Operation(summary = "Sending emails")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Email sent"),
+            @ApiResponse(responseCode = "200", description = "Email sent",
+            		content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "400", description = "Bad Request", 
             		content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
             @ApiResponse(responseCode = "404", description = "No data found",

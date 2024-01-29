@@ -1,30 +1,26 @@
 package com.ptn.prueba_tecnica_nelumbo_envio_correo.application.dto.response;
 
-import com.ptn.prueba_tecnica_nelumbo_envio_correo.infrastructure.configuration.Constants;
+import java.util.Date;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class MailHistoryResponseDto {
 	
-	@NotNull(message = Constants.FIELD_NOT_NULL)
-    @NotBlank(message = Constants.FIELD_NOT_BLANK)
     private String email;
-	
-	@NotNull(message = Constants.FIELD_NOT_NULL)
-	@NotBlank(message = Constants.FIELD_NOT_BLANK)
+
 	private String plate;
 	
-	@NotNull(message = Constants.FIELD_NOT_NULL)
-	@NotBlank(message = Constants.FIELD_NOT_BLANK)
 	private String message;
 	
-	@NotNull(message = Constants.FIELD_NOT_NULL)
-	@NotBlank(message = Constants.FIELD_NOT_BLANK)
 	private String parkingName;
+
+    private Date creation;
 
 }

@@ -1,5 +1,7 @@
 package com.ptn.prueba_tecnica_nelumbo_envio_correo.domain.model;
 
+import java.util.Date;
+
 public class MailHistoryModel {
     
     private String email;
@@ -10,15 +12,19 @@ public class MailHistoryModel {
     
     private String parkingName;
 
+    private Date creation;
+
 
 	public MailHistoryModel() {
 	}
 
-	public MailHistoryModel(String email, String message, String plate, String parkingName) {
+	public MailHistoryModel(String email, String message, String plate, String parkingName, Date creation) {
+		super();
 		this.email = email;
 		this.message = message;
 		this.plate = plate;
 		this.parkingName = parkingName;
+		this.creation = creation;
 	}
 
 	public String getEmail() {
@@ -51,6 +57,14 @@ public class MailHistoryModel {
 
 	public void setParkingName(String parkingName) {
 		this.parkingName = parkingName;
+	}
+
+	public Date getCreation() {
+		return creation;
+	}
+
+	public void setCreation(Date creation) {
+		this.creation = creation;
 	}
 
 }

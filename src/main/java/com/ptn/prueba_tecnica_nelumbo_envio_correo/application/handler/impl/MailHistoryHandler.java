@@ -31,7 +31,7 @@ public class MailHistoryHandler implements IMailHistoryHandler{
 	@Override
 	public Map<String, String> getUserMostMailsSent() {
 		Map<String, String> resultMap = new HashMap<String, String>();
-		resultMap.put("mail_user", iMailHistoryServicePort.getUserMostMailsSent());
+		resultMap.put("mailUser", iMailHistoryServicePort.getUserMostMailsSent());
 		return resultMap;
 	}
 
