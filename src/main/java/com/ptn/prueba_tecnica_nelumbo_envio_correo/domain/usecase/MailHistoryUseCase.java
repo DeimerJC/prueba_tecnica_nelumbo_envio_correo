@@ -1,6 +1,7 @@
 package com.ptn.prueba_tecnica_nelumbo_envio_correo.domain.usecase;
 
 import java.util.Date;
+import java.util.List;
 
 import com.ptn.prueba_tecnica_nelumbo_envio_correo.domain.api.IMailHistoryServicePort;
 import com.ptn.prueba_tecnica_nelumbo_envio_correo.domain.model.MailHistoryModel;
@@ -20,12 +21,12 @@ public class MailHistoryUseCase implements IMailHistoryServicePort {
 	}
 
 	@Override
-	public MailHistoryModel getUserMostMailsSent() {
+	public String getUserMostMailsSent() {
 		return iMailHistoryPersistencePort.getUserMostMailsSent();
 	}
 
 	@Override
-	public MailHistoryModel filter(Date dateFrom, Date dateUntil, String email) {
+	public List<MailHistoryModel> filter(Date dateFrom, Date dateUntil, String email) {
 		return iMailHistoryPersistencePort.filter(dateFrom, dateUntil, email);
 	}
 

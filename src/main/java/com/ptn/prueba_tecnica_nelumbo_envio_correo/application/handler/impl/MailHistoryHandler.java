@@ -2,6 +2,7 @@ package com.ptn.prueba_tecnica_nelumbo_envio_correo.application.handler.impl;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -23,20 +24,20 @@ public class MailHistoryHandler implements IMailHistoryHandler{
 	@Override
 	public Map<String, Date> getDayMostMailsSent() {
 		Map<String, Date> resultMap = new HashMap<String, Date>();
-		resultMap.put("Date", iMailHistoryServicePort.getDayMostMailsSent());
+		resultMap.put("date", iMailHistoryServicePort.getDayMostMailsSent());
 		return resultMap;
 	}
 
 	@Override
-	public MailHistoryResponseDto getUserMostMailsSent() {
-		return iMailHistoryResponseMapper.toResponse( 
-				iMailHistoryServicePort.getUserMostMailsSent() 
-			);
+	public Map<String, String> getUserMostMailsSent() {
+		Map<String, String> resultMap = new HashMap<String, String>();
+		resultMap.put("mail_user", iMailHistoryServicePort.getUserMostMailsSent());
+		return resultMap;
 	}
 
 	@Override
-	public MailHistoryResponseDto filter(Date dateFrom, Date dateUntil, String email) {
-		return iMailHistoryResponseMapper.toResponse( 
+	public List<MailHistoryResponseDto> filter(Date dateFrom, Date dateUntil, String email) {
+		return iMailHistoryResponseMapper.toResponseList( 
 				iMailHistoryServicePort.filter(dateFrom, dateUntil, email) 
 			);
 	}

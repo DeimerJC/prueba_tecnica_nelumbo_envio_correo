@@ -1,6 +1,7 @@
 package com.ptn.prueba_tecnica_nelumbo_envio_correo.infrastructure.input.rest;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
@@ -45,7 +46,7 @@ public class MailHistoryRestController {
     		content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
     })
     @GetMapping("/most-sent/user")
-    public ResponseEntity<MailHistoryResponseDto> getUserMostMailsSent() {
+    public ResponseEntity<Map<String, String>> getUserMostMailsSent() {
         return ResponseEntity.ok(iMailHistoryHandler.getUserMostMailsSent());
     }
     
@@ -57,7 +58,7 @@ public class MailHistoryRestController {
     		content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
     })
     @GetMapping("/filter")
-    public ResponseEntity<MailHistoryResponseDto> getAllVehicles(@RequestParam Date dateFrom, @RequestParam Date dateUntil, @RequestParam String email) {
+    public ResponseEntity<List<MailHistoryResponseDto>> getAllVehicles(@RequestParam Date dateFrom, @RequestParam Date dateUntil, @RequestParam String email) {
         return ResponseEntity.ok(iMailHistoryHandler.filter(dateFrom, dateUntil, email));
     }
     
