@@ -1,5 +1,6 @@
 package com.ptn.prueba_tecnica_nelumbo_envio_correo.infrastructure.out.mongodb.adapter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -10,10 +11,15 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.ArithmeticOperators;
+import org.springframework.data.mongodb.core.aggregation.ConditionalOperators.Cond;
+import org.springframework.data.mongodb.core.aggregation.DateOperators;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.data.mongodb.core.aggregation.GroupOperation;
+import org.springframework.data.mongodb.core.aggregation.ObjectOperators.ObjectToArray;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.aggregation.SortOperation;
+import org.springframework.data.mongodb.core.query.Criteria;
 
 import com.mongodb.client.AggregateIterable;
 import com.ptn.prueba_tecnica_nelumbo_envio_correo.domain.model.MailHistoryModel;
@@ -118,10 +124,10 @@ public class MailHistoryMongoAdapter implements IMailHistoryPersistencePort {
 		
 		// Proyección para extraer solo la fecha de la creación (sin la hora)
         ProjectionOperation projection = Aggregation.project()
-        .andExpression("{$dateToString: { format: '%Y-%m-%d', date: '$creation' }}").as("fecha");
-
+        .andExpression("{$dateToString: { format: '%Y-%m-%d', date: '$creation' }}").as("_id");
+		
         // Agrupación por fecha y contando los documentos por cada fecha
-        GroupOperation group = Aggregation.group("fecha").count().as("cantidad");
+        GroupOperation group = Aggregation.group("_id").count().as("cantidad");
 
         // Ordenar por cantidad descendente para obtener el día con más registros primero
         SortOperation sort = Aggregation.sort(Sort.by(Sort.Order.desc("cantidad")));
@@ -134,16 +140,16 @@ public class MailHistoryMongoAdapter implements IMailHistoryPersistencePort {
 
         
         for (ConteoPorDia conteoPorDia : results) {
-        	System.err.println(" "+conteoPorDia.getFecha());
+        	System.err.println(" "+conteoPorDia.get_id());
         	System.err.println(" "+conteoPorDia.getCantidad());
 		}
         
 		
 		
-//		List<ConteoPorDia> n =iMailHistoryRepository.findFechaConMasRegistros();
-//		for (ConteoPorDia fechaConMasRegistros : n) {
-//			System.err.println("2 "+fechaConMasRegistros.getFecha());
-//			System.err.println(" "+fechaConMasRegistros.getCantidad());
+//		List<AggregateResult> n =iMailHistoryRepository.findFechaConMasRegistros();
+//		for (AggregateResult fechaConMasRegistros : n) {
+//			System.err.println("2 "+fechaConMasRegistros.get_id());
+//			System.err.println(" "+fechaConMasRegistros.getCount());
 //		}
 		
 		return null;
@@ -185,18 +191,39 @@ public class MailHistoryMongoAdapter implements IMailHistoryPersistencePort {
 		return iMailHistoryEntityMapper.toModel(
 				mongoTemplate.insert(mailHistoryEntity));
 	}
+
+ public class AggregateResult {
+
+    private String _id;
+    private int count;
+    
+	public String get_id() {
+		return _id;
+	}
+	public void set_id(String _id) {
+		this._id = _id;
+	}
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
+
+}
 	
 	public class ConteoPorDia {
 
-	    private Date fecha;
+	    private String _id;
 	    private Long cantidad;
 	    
-		public Date getFecha() {
-			return fecha;
-		}
-		public void setFecha(Date fecha) {
-			this.fecha = fecha;
-		}
+	    public String get_id() {
+	        return _id;
+	    }
+
+	    public void set_id(String _id) {
+	        this._id = _id;
+	    }
 		public Long getCantidad() {
 			return cantidad;
 		}
